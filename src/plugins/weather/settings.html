@@ -36,6 +36,11 @@
     </div>
 
     <div class="form-group">
+        <input type="checkbox" id="24HourClock" name="24HourClock" onclick="this.value=this.checked ? 'true' : 'false';">
+        <span>24-hour clock Format</span>
+    </div>
+
+    <div class="form-group">
         <input type="checkbox" id="displayForecast" name="displayForecast" onclick="this.value=this.checked ? 'true' : 'false';">
         <span>Forecast</span>
         <select id="forecastDays" name="forecastDays" class="form-input">
@@ -106,6 +111,9 @@
             document.getElementById('displayMetrics').checked = pluginSettings.displayMetrics;
             document.getElementById('displayMetrics').value = pluginSettings.displayMetrics;
 
+            document.getElementById('24HourClock').checked = pluginSettings.displayMetrics;
+            document.getElementById('24HourClock').value = pluginSettings.displayMetrics;
+
             document.getElementById('displayGraph').checked = pluginSettings.displayGraph;
             document.getElementById('displayGraph').value = pluginSettings.displayGraph;
 
@@ -119,6 +127,8 @@
 
             document.getElementById('displayMetrics').checked = true;
             document.getElementById('displayMetrics').value = "true";
+            document.getElementById('24HourClock').checked = true;
+            document.getElementById('24HourClock').value = "true";
             document.getElementById('displayGraph').checked = true;
             document.getElementById('displayGraph').value = "true";
             document.getElementById('displayForecast').checked = true;

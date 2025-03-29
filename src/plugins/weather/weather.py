@@ -65,7 +65,7 @@ class Weather(BasePlugin):
 
         timezone = device_config.get_config("timezone", default="America/New_York")
         tz = pytz.timezone(timezone)
-        template_params = self.parse_weather_data(weather_data, aqi_data, location_data, tz, units)
+        template_params = self.parse_weather_data(weather_data, aqi_data, location_data, tz, units, settings)
 
         template_params["plugin_settings"] = settings
 
@@ -75,7 +75,7 @@ class Weather(BasePlugin):
             raise RuntimeError("Failed to take screenshot, please check logs.")
         return image
     
-    def parse_weather_data(self, weather_data, aqi_data, location_data, tz, units):
+    def parse_weather_data(self, weather_data, aqi_data, location_data, tz, units, settings):
         current = weather_data.get("current")
         dt = datetime.fromtimestamp(current.get('dt'), tz=timezone.utc).astimezone(tz)
         current_icon = current.get("weather")[0].get("icon").replace("n", "d")
@@ -92,7 +92,7 @@ class Weather(BasePlugin):
         data['forecast'] = self.parse_forecast(weather_data.get('daily'), tz)
         data['data_points'] = self.parse_data_points(weather_data, aqi_data, tz, units)
 
-        data['hourly_forecast'] = self.parse_hourly(weather_data.get('hourly'), tz)
+        data['hourly_forecast'] = self.parse_hourly(weather_data.get('hourly'), tz, settings)
         return data
 
     def parse_forecast(self, daily_forecast, tz):
@@ -109,14 +109,16 @@ class Weather(BasePlugin):
             forecast.append(day_forecast)
         return forecast
 
-    def parse_hourly(self, hourly_forecast, tz):
+    def parse_hourly(self, hourly_forecast, tz, settings):
         hourly = []
+        use_24_hour_format = settings.get('24HourClock', False)
         for hour in hourly_forecast[:24]:
             dt = datetime.fromtimestamp(hour.get('dt'), tz=timezone.utc).astimezone(tz)
+            time = dt.strftime("%H:%M") if use_24_hour_format else dt.strftime("%-I %p")
             hour_forecast = {
-                "time": dt.strftime("%-I %p"),
+                "time": time,
                 "temperature": int(hour.get("temp")),
-                "precipitiation": hour.get("pop")
+                "precipitation": hour.get("pop")
             }
             hourly.append(hour_forecast)
         return hourly
