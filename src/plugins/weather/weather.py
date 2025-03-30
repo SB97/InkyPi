@@ -110,8 +110,10 @@ class Weather(BasePlugin):
         return forecast
 
     def parse_hourly(self, hourly_forecast, tz, settings):
-        hourly = []
         use_24_hour_format = settings.get('24HourClock', False)
+
+        hourly = []
+
         for hour in hourly_forecast[:24]:
             dt = datetime.fromtimestamp(hour.get('dt'), tz=timezone.utc).astimezone(tz)
             time = dt.strftime("%H:%M") if use_24_hour_format else dt.strftime("%-I %p")
@@ -124,6 +126,8 @@ class Weather(BasePlugin):
         return hourly
         
     def parse_data_points(self, weather, air_quality, tz, units, settings):
+        use_24_hour_format = settings.get('24HourClock', False)
+
         data_points = []
 
         sunrise_epoch = weather.get('current', {}).get("sunrise")
