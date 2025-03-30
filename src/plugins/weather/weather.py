@@ -118,7 +118,7 @@ class Weather(BasePlugin):
             hour_forecast = {
                 "time": time,
                 "temperature": int(hour.get("temp")),
-                "precipitation": hour.get("pop")
+                "precipitiation": hour.get("pop")
             }
             hourly.append(hour_forecast)
         return hourly
