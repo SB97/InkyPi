@@ -132,7 +132,7 @@ class Weather(BasePlugin):
 
         sunrise_epoch = weather.get('current', {}).get("sunrise")
         sunrise_dt = datetime.fromtimestamp(sunrise_epoch, tz=timezone.utc).astimezone(tz)
-        sunrise_time = sunrise_dt.strftime("%H:%M") if use_24_hour_format else dt.strftime("%-I %p")
+        sunrise_time = sunrise_dt.strftime("%H:%M") if use_24_hour_format else sunrise_dt.strftime("%-I %p")
         data_points.append({
             "label": "Sunrise",
             "measurement": sunrise_time,
@@ -142,7 +142,7 @@ class Weather(BasePlugin):
 
         sunset_epoch = weather.get('current', {}).get("sunset")
         sunset_dt = datetime.fromtimestamp(sunset_epoch, tz=timezone.utc).astimezone(tz)
-        sunset_time = sunset_dt.strftime("%H:%M") if use_24_hour_format else dt.strftime("%-I %p")
+        sunset_time = sunset_dt.strftime("%H:%M") if use_24_hour_format else sunset_dt.strftime("%-I %p")
         data_points.append({
             "label": "Sunset",
             "measurement": sunset_time,
