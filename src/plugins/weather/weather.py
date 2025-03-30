@@ -90,7 +90,7 @@ class Weather(BasePlugin):
             "units": units
         }
         data['forecast'] = self.parse_forecast(weather_data.get('daily'), tz)
-        data['data_points'] = self.parse_data_points(weather_data, aqi_data, tz, units)
+        data['data_points'] = self.parse_data_points(weather_data, aqi_data, tz, units, settings)
 
         data['hourly_forecast'] = self.parse_hourly(weather_data.get('hourly'), tz, settings)
         return data
@@ -123,23 +123,25 @@ class Weather(BasePlugin):
             hourly.append(hour_forecast)
         return hourly
         
-    def parse_data_points(self, weather, air_quality, tz, units):
+    def parse_data_points(self, weather, air_quality, tz, units, settings):
         data_points = []
 
         sunrise_epoch = weather.get('current', {}).get("sunrise")
         sunrise_dt = datetime.fromtimestamp(sunrise_epoch, tz=timezone.utc).astimezone(tz)
+        sunrise_time = sunrise_dt.strftime("%H:%M") if use_24_hour_format else dt.strftime("%-I %p")
         data_points.append({
             "label": "Sunrise",
-            "measurement": sunrise_dt.strftime('%I:%M').lstrip("0"),
+            "measurement": sunrise_time,
             "unit": sunrise_dt.strftime('%p'),
             "icon": self.get_plugin_dir('icons/sunrise.png')
         })
 
         sunset_epoch = weather.get('current', {}).get("sunset")
         sunset_dt = datetime.fromtimestamp(sunset_epoch, tz=timezone.utc).astimezone(tz)
+        sunset_time = sunset_dt.strftime("%H:%M") if use_24_hour_format else dt.strftime("%-I %p")
         data_points.append({
             "label": "Sunset",
-            "measurement": sunset_dt.strftime('%I:%M').lstrip("0"),
+            "measurement": sunrise_time,
             "unit": sunset_dt.strftime('%p'),
             "icon": self.get_plugin_dir('icons/sunset.png')
         })
