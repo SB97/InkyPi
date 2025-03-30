@@ -136,7 +136,7 @@ class Weather(BasePlugin):
         data_points.append({
             "label": "Sunrise",
             "measurement": sunrise_time,
-            "unit": sunrise_dt.strftime('%p'),
+            "unit": '' if use_24_hour_format else sunset_dt.strftime('%p'),
             "icon": self.get_plugin_dir('icons/sunrise.png')
         })
 
@@ -145,8 +145,8 @@ class Weather(BasePlugin):
         sunset_time = sunset_dt.strftime("%H:%M") if use_24_hour_format else dt.strftime("%-I %p")
         data_points.append({
             "label": "Sunset",
-            "measurement": sunrise_time,
-            "unit": sunset_dt.strftime('%p'),
+            "measurement": sunset_time,
+            "unit": '' if use_24_hour_format else sunset_dt.strftime('%p'),
             "icon": self.get_plugin_dir('icons/sunset.png')
         })
 
